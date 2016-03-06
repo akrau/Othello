@@ -23,7 +23,7 @@ public:
         
     bool isDone();
     bool hasMoves(Side side);
-    Move *findMoves(Side side) 
+    Move *findMoves(Side side);
     bool checkMove(Move *m, Side side);
     void doMove(Move *m, Side side);
     int count(Side side);

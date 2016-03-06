@@ -6,20 +6,19 @@
  * within 30 seconds.
  */
 Player::Player(Side side) {
-    // Will be set to true in test_minimax.cpp.
-    testingMinimax = false;
-    side = side;
-    opponentSide = ((side == BLACK)? WHITE : BLACK);
-    board = new Board();
-    how to I fucking time this function????
-
     /* 
      * TODO: Do any initialization you need to do here (setting up the board,
      * precalculating things, etc.) However, remember that you will only have
      * 30 seconds.
      */
+
      //intialize board in some way? call it board
-     int set = 0;
+    // Will be set to true in test_minimax.cpp.
+    testingMinimax = false;
+    side = side;
+    opponentSide = ((side == BLACK)? WHITE : BLACK);
+    board = new Board();
+    //how to I fucking time this function????
 
 }
 
@@ -27,7 +26,7 @@ Player::Player(Side side) {
  * Destructor for the player.
  */
 Player::~Player() {
-
+    delete board;
 }
 
 /*
@@ -48,16 +47,18 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * process the opponent's opponents move before calculating your own move
      */
 
-     Board.set(opponentSide, opponentsMove->x, opponentsMove->y); 
-     Move * move = Board.findMoves(side) 
-     if(move != NULL)
-     {
+    if (opponentsMove != NULL)
+    {
+        board->doMove(opponentsMove, opponentSide); 
+    }
+    Move * move = board->findMoves(side);
+    if(move != NULL)
+    {
+        board->doMove(move, side);
         return move;
-        Board.set(side, move->x, move->y);
-     }
+    }
     
     else
         return NULL;
     //AI Interpretation
-    how should i time this?????
 }

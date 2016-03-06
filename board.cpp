@@ -70,8 +70,10 @@ bool Board::hasMoves(Side side) {
 Move *Board::findMoves(Side side) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            Move move(i, j);
-            if (checkMove(&move, side)) return move;
+            Move * move;
+            move->setX(i);
+            move->setY(j);
+            if (checkMove(move, side)) return move;
         }
     }
     return NULL;

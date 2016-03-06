@@ -1,7 +1,7 @@
 CC          = g++
 CFLAGS      = -Wall -ansi -pedantic -ggdb
 OBJS        = player.o board.o
-PLAYERNAME  = The Lucid Dead
+PLAYERNAME  = TheLucidDead
 
 all: $(PLAYERNAME) testgame
 	
