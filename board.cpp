@@ -68,17 +68,19 @@ bool Board::hasMoves(Side side) {
 }
 
 Move *Board::findMoves(Side side) {
+    Move *m = NULL;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             Move move(i, j);
             if (checkMove(&move, side))
             {
-                Move * m = move;
+                m = &move;
+                std::cerr << "m x: " << m->getX() << " m y: " << m->getY() << std::endl;
                 return m;
             }
         }
     }
-    return NULL;
+    return m;
 }
 
 /*

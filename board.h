@@ -5,6 +5,8 @@
 #include "common.h"
 using namespace std;
 
+#include <iostream>
+
 class Board {
    
 private:
