@@ -12,14 +12,20 @@ Player::Player(Side ourSide) {
      * 30 seconds.
      */
 
-     //intialize board in some way? call it board
+    // use clock to time the constructor
+    //clock_t t = clock();
+    
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
     side = ourSide;
     opponentSide = ((side == BLACK)? WHITE : BLACK);
     board = new Board();
-    //how to I fucking time this function????
-
+/*
+    while ((clock() - t) / CLOCKS_PER_SEC < 30.0)
+    {
+        //
+    }   
+    */
 }
 
 /*
@@ -46,19 +52,23 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */
-
-    if (opponentsMove != NULL)
-    {
-        board->doMove(opponentsMove, opponentSide); 
-    }
-    Move * move = board->findMoves(side);
-    if(move != NULL)
-    {
-        board->doMove(move, side);
-        return move;
-    }
     
-    else
-        return NULL;
-    //AI Interpretation
+    clock_t t = clock();
+    if (msLeft < 0 || (clock() - t) / CLOCKS_PER_SEC < msLeft / 1000.0)
+    {
+        if (opponentsMove != NULL)
+        {
+            board->doMove(opponentsMove, opponentSide); 
+        }
+        Move * move = board->findMoves(side);
+        if(move != NULL)
+        {
+            board->doMove(move, side);
+            return move;
+        }
+        else
+            return NULL;
+    }
+    return NULL;
+
 }

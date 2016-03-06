@@ -1,11 +1,10 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
+#include <iostream>
 #include <bitset>
 #include "common.h"
 using namespace std;
-
-#include <iostream>
 
 class Board {
    
