@@ -78,8 +78,6 @@ Move *Board::findMoves(Side side) {
                 return m;
             }
 
-                return &move;
-
         }
     }
     return NULL;
