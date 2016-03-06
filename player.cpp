@@ -60,12 +60,12 @@ Player::~Player() {
         {
             board->doMove(opponentsMove, opponentSide); 
         }
-        std::vector<Move *> moves = board->findMoves(side);
-        if(moves != NULL)
+        vector<Move *> moves = board->listMoves(side);
+        if(!(moves.empty()))
         {
             Move * bestmove = moves[0];
             int bestScore = heuristicScore(moves[0], board->copy());
-            for(int i = 1; i < moves.size(); i++)
+            for(unsigned int i = 1; i < moves.size(); i++)
             {
                 int score = heuristicScore(moves[i], board->copy());
                 if(score > bestScore)
@@ -75,7 +75,7 @@ Player::~Player() {
                 }
             }
             board->doMove(bestmove, side);
-            return move;
+            return bestmove;
         }
         
         else
@@ -85,12 +85,12 @@ Player::~Player() {
 }
 
 
-int Player::heuristicScore(Move *move, Board b)
+int Player::heuristicScore(Move *move, Board *b)
 {
     double sum;
     b->doMove(move, side);
     sum = b->count(side) - b->count(opponentSide);
-    if(move->x == 0 && move->x == 0 || move->x == 0 && move->x == 7 || move->x == 7 && move->x == 0 || move->x == 7 && move->x == 7)
+    if((move->x == 0 && move->x == 0) || (move->x == 0 && move->x == 7) || (move->x == 7 && move->x == 0) || (move->x == 7 && move->x == 7))
         sum *= 3;
     else if(move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7)
         sum *= 1.5;
@@ -98,7 +98,7 @@ int Player::heuristicScore(Move *move, Board b)
     Move two(7, 0);
     Move three(0, 7);
     Move four(7, 7);
-    if(checkMove(&one, opponentSide)|| checkMove(&two, opponentSide) || checkMove(&three, opponentSide) || checkMove(&four, opponentSide))
+    if(board->checkMove(&one, opponentSide)|| board->checkMove(&two, opponentSide) || board->checkMove(&three, opponentSide) || board->checkMove(&four, opponentSide))
         sum *= -3;
     return sum;
 

@@ -5,6 +5,7 @@
 #include <bitset>
 #include "common.h"
 using namespace std;
+#include <vector>
 
 class Board {
    
