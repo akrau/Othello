@@ -5,7 +5,7 @@
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish 
  * within 30 seconds.
  */
-Player::Player(Side side) {
+Player::Player(Side ourSide) {
     /* 
      * TODO: Do any initialization you need to do here (setting up the board,
      * precalculating things, etc.) However, remember that you will only have
@@ -15,7 +15,7 @@ Player::Player(Side side) {
      //intialize board in some way? call it board
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
-    side = side;
+    side = ourSide;
     opponentSide = ((side == BLACK)? WHITE : BLACK);
     board = new Board();
     //how to I fucking time this function????
