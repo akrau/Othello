@@ -29,7 +29,7 @@ Board *Board::copy() {
 }
 
 bool Board::occupied(int x, int y) {
-    return taken[x + 8*y];
+    return taken[x + 8*y]; //checks if spot is occupied
 }
 
 bool Board::get(Side side, int x, int y) {
