@@ -9,7 +9,8 @@ Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
     side = side;
-    board = what the fuck do i do here????
+    opponentSide = ((side == BLACK)? WHITE : BLACK);
+    board = new Board();
     how to I fucking time this function????
 
     /* 
@@ -45,10 +46,15 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
-     */ 
+     */
+
+     Board.set(opponentSide, opponentsMove->x, opponentsMove->y); 
      Move * move = Board.findMoves(side) 
      if(move != NULL)
+     {
         return move;
+        Board.set(side, move->x, move->y);
+     }
     
     else
         return NULL;
