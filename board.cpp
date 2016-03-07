@@ -72,10 +72,7 @@ Move *Board::findMoves(Side side) {
         for (int j = 0; j < 8; j++) {
             Move move(i, j);
             if (checkMove(&move, side))
-            {
-                Move * m = move;
-                return m;
-            }
+                return &move;
         }
     }
     return NULL;
