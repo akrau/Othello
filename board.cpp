@@ -67,6 +67,16 @@ bool Board::hasMoves(Side side) {
     return false;
 }
 
+Move *Board::findMoves(Side side) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Move move(i, j);
+            if (checkMove(&move, side)) return move;
+        }
+    }
+    return NULL;
+}
+
 /*
  * Returns true if a move is legal for the given side; false otherwise.
  */
