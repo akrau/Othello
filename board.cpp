@@ -83,6 +83,19 @@ Move *Board::findMoves(Side side) {
     return NULL;
 }
 
+std::vector<Move *> Board::listMoves(Side side) 
+{
+    std::vector<Move *> moves;
+    for (int i = 0; i < 8; i++) 
+        for (int j = 0; j < 8; j++){
+            Move * move = new Move(i, j);
+            if(checkMove(move, side))
+                moves.push_back(move);
+        }
+    return moves;
+
+}
+
 /*
  * Returns true if a move is legal for the given side; false otherwise.
  */

@@ -47,7 +47,65 @@ Player::~Player() {
  * The move returned must be legal; if there are no valid moves for your side,
  * return NULL.
  */
-Move *Player::doMove(Move *opponentsMove, int msLeft) {
+ Move *Player::doMove(Move *opponentsMove, int msLeft) {
+    /* 
+     * TODO: Implement how moves your AI should play here. You should first
+     * process the opponent's opponents move before calculating your own move
+     */
+    clock_t t = clock();
+    if (msLeft < 0 || (clock() - t) / CLOCKS_PER_SEC < msLeft / 1000.0)
+    {
+
+        if (opponentsMove != NULL)
+        {
+            board->doMove(opponentsMove, opponentSide); 
+        }
+        std::vector<Move *> moves = board->findMoves(side);
+        if(moves != NULL)
+        {
+            Move * bestmove = moves[0];
+            int bestScore = heuristicScore(moves[0], board->copy());
+            for(int i = 1; i < moves.size(); i++)
+            {
+                int score = heuristicScore(moves[i], board->copy());
+                if(score > bestScore)
+                {
+                    bestmove = moves[i];
+                    bestScore = score;
+                }
+            }
+            board->doMove(bestmove, side);
+            return move;
+        }
+        
+        else
+            return NULL;
+    }
+    return NULL;
+}
+
+
+int Player::heuristicScore(Move *move, Board b)
+{
+    double sum;
+    b->doMove(move, side);
+    sum = b->count(side) - b->count(opponentSide);
+    if(move->x == 0 && move->x == 0 || move->x == 0 && move->x == 7 || move->x == 7 && move->x == 0 || move->x == 7 && move->x == 7)
+        sum *= 3;
+    else if(move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7)
+        sum *= 1.5;
+    Move one(0, 0);
+    Move two(7, 0);
+    Move three(0, 7);
+    Move four(7, 7);
+    if(checkMove(&one, opponentSide)|| checkMove(&two, opponentSide) || checkMove(&three, opponentSide) || checkMove(&four, opponentSide))
+        sum *= -3;
+    return sum;
+
+}
+
+
+Move *Player::doMoveRandom(Move *opponentsMove, int msLeft) {
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
