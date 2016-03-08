@@ -24,6 +24,7 @@ public:
     Board *copy();
         
     bool isDone();
+    void printBoard();
     bool hasMoves(Side side);
     Move *findMoves(Side side);
     std::vector<Move *> listMoves(Side side);

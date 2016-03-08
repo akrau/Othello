@@ -14,10 +14,11 @@ public:
     Player(Side side);
     ~Player();
 
-    Move *doMoveHeuristic(Move *opponentsMove, int msLeft)
+    Move *doMoveHeuristic(Move *opponentsMove, vector<Move *> moves);
+    Move *doMoveMinMax(Move *opponentsMove, vector<Move *> moves);
     Move *doMove(Move *opponentsMove, int msLeft);
     Move *doMoveRandom(Move *opponentsMove, int msLeft);
-    int heuristicScore(Move *move, Board *b);
+    double heuristicScore(Move *move, Board *b, Side sde);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;

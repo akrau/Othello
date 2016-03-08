@@ -16,10 +16,23 @@ Player::Player(Side ourSide) {
     //clock_t t = clock();
     
     // Will be set to true in test_minimax.cpp.
-    testingMinimax = false;
+    testingMinimax = true;
     side = ourSide;
+    //side = WHITE;
     opponentSide = ((side == BLACK)? WHITE : BLACK);
-    board = new Board();
+    /*char boardData[64] = {
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+        ' ', 'b', ' ', ' ', ' ', ' ', ' ', ' ', 
+        'b', 'w', 'b', 'b', 'b', 'b', ' ', ' ', 
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
+    };
+    Board *board = new Board();
+    board->setBoard(boardData);*/
+   board = new Board();
 /*
     while ((clock() - t) / CLOCKS_PER_SEC < 30.0)
     {
@@ -51,34 +64,70 @@ Player::~Player() {
  */
  Move *Player::doMove(Move *opponentsMove, int msLeft) 
     {
-        if(!testingMinimax)
-            doMoveHeuristic(opponentsMove, msLeft);
-        else
+        clock_t t = clock();
+        if (msLeft < 0 || (clock() - t) / CLOCKS_PER_SEC < msLeft / 1000.0)
         {
-            
+
+            if (opponentsMove != NULL)
+            {
+                board->doMove(opponentsMove, opponentSide); 
+            }
+            vector<Move *> moves = board->listMoves(side);
+            if(!(moves.empty()))
+            {
+                if(!testingMinimax)
+                    return doMoveHeuristic(opponentsMove, moves);
+                else
+                    return doMoveMinMax(opponentsMove, moves);
+            }
+            else{
+		board->printBoard();
+                return NULL;
+		}
         }
+	board->printBoard();
+        return NULL;
+        
     }
+
+Move *Player::doMoveMinMax(Move *opponentsMove, vector<Move *> moves)
+{
+    double lowestscore = -500000;
+    Move * bestmove;
+    vector<Move *> children;
+    for(unsigned int i = 0; i < moves.size(); i++)
+    {
+        Board * b = board->copy();
+	std::cerr << "This is a possible move: " << moves[i]->x << "," << moves[i]->y << endl;
+        double lowscore = 100000;
+        b->doMove(moves[i], side);
+        children = b->listMoves(opponentSide);
+        for(unsigned int j = 0; j < children.size(); j++)
+        {
+            std::cerr << "This is a child move: " << children[j]->x << "," <<children[j]->y <<endl;
+            double score = heuristicScore(children[j], b->copy(), opponentSide);
+	    std::cerr << "This is score: " << score << endl;
+            if(score < lowscore)
+                    lowscore = score;
+	    std::cerr << "This is lowest score: " << lowscore << endl;
+        }
+        if(lowscore > lowestscore)
+        {        bestmove = moves[i]; lowestscore = lowscore; }
+	std::cerr << "This is lowscore: " <<lowscore << ". This is lowest score: " << lowestscore << endl;
+    }
+	board->doMove(bestmove, side);
+        return bestmove;
+}
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */
- Move *Player::doMoveHeuristic(Move *opponentsMove, int msLeft) {
-    clock_t t = clock();
-    if (msLeft < 0 || (clock() - t) / CLOCKS_PER_SEC < msLeft / 1000.0)
-    {
-
-        if (opponentsMove != NULL)
-        {
-            board->doMove(opponentsMove, opponentSide); 
-        }
-        vector<Move *> moves = board->listMoves(side);
-        if(!(moves.empty()))
-        {
+ Move *Player::doMoveHeuristic(Move *opponentsMove, vector<Move *> moves) {
             Move * bestmove = moves[0];
-            int bestScore = heuristicScore(moves[0], board->copy());
+            double bestScore = heuristicScore(moves[0], board->copy(), side);
             for(unsigned int i = 1; i < moves.size(); i++)
             {
-                int score = heuristicScore(moves[i], board->copy());
+                double score = heuristicScore(moves[i], board->copy(), side);
                 if(score > bestScore)
                 {
                     bestmove = moves[i];
@@ -86,13 +135,7 @@ Player::~Player() {
                 }
             }
             board->doMove(bestmove, side);
-            return bestmove;
-        }
-        
-        else
-            return NULL;
-    }
-    return NULL;
+            return bestmove;  
 }
 
 /*
@@ -106,22 +149,23 @@ Player::~Player() {
 * detrimental.
 *
 */
-int Player::heuristicScore(Move *move, Board *b)
+double Player::heuristicScore(Move *move, Board *b, Side sde)
 {
     double sum;
-    b->doMove(move, side);
+    b->doMove(move, sde);
+    b->printBoard();
     sum = b->count(side) - b->count(opponentSide);
     if(!testingMinimax) {
         if((move->getX() == 0 && move->getY() == 0) || (move->getX() == 0 && move->getY() == 7) || (move->getX() == 7 && move->getY() == 0) || (move->getX() == 7 && move->getY() == 7))
-            sum *= 3;
+            sum += 3;
         else if(move->getX() == 0 || move->getX() == 7 || move->getY() == 0 || move->getY() == 7)
-            sum *= 1.5;
+            sum += 1.5;
         Move one(0, 0);
         Move two(7, 0);
         Move three(0, 7);
         Move four(7, 7);
         if(board->checkMove(&one, opponentSide)|| board->checkMove(&two, opponentSide) || board->checkMove(&three, opponentSide) || board->checkMove(&four, opponentSide))
-            sum *= -2;
+            sum += -3;
 
     }
     return sum;

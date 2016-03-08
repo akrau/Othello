@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     // Initialize player as the white player, and set testing_minimax flag.
     Player *player = new Player(WHITE);
     player->testingMinimax = true;
+    player->board = board;
 
 
     /** 
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]) {
      */
 
     // Get player's move and check if it's right.
-    Move *move = player->doMove(NULL, 0);
+    Move *move = player->doMove(NULL, 960000);
 
     if (move != NULL && move->x == 1 && move->y == 1) {
         printf("Correct move: (1, 1)");

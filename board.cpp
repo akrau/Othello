@@ -32,6 +32,22 @@ bool Board::occupied(int x, int y) {
     return taken[x + 8*y]; //checks if spot is occupied
 }
 
+void Board::printBoard()
+{
+	for(int i = 0; i < 8; i++)
+{		for(int j = 0; j < 8; j++){
+			if(get(BLACK, i, j))
+				cerr << "x";
+			else if(get(WHITE, i, j))
+				cerr <<"y";
+			else
+				cerr << " ";
+		}
+		cerr << endl;
+	}
+
+}
+
 bool Board::get(Side side, int x, int y) {
     return occupied(x, y) && (black[x + 8*y] == (side == BLACK));
 }
