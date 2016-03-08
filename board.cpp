@@ -32,10 +32,17 @@ bool Board::occupied(int x, int y) {
     return taken[x + 8*y]; //checks if spot is occupied
 }
 
+
+/*
+* Prints current state of the board using "x" for black, "y" for white, and 
+* " " for an empty space
+*/
 void Board::printBoard()
 {
 	for(int i = 0; i < 8; i++)
-{		for(int j = 0; j < 8; j++){
+    {		
+        for(int j = 0; j < 8; j++)
+        {
 			if(get(BLACK, i, j))
 				cerr << "x";
 			else if(get(WHITE, i, j))
@@ -83,6 +90,9 @@ bool Board::hasMoves(Side side) {
     return false;
 }
 
+/*
+* Returns first available move for side 
+*/
 Move *Board::findMoves(Side side) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -90,7 +100,6 @@ Move *Board::findMoves(Side side) {
             if (checkMove(move, side))
             {
                 Move *m = move;
-                std::cerr << "m x: " << m->getX() << " m y: " << m->getY() << std::endl;
                 return m;
             }
 
@@ -99,6 +108,9 @@ Move *Board::findMoves(Side side) {
     return NULL;
 }
 
+/*
+* Returns all possible moves for a particular side on the current board
+*/
 std::vector<Move *> Board::listMoves(Side side) 
 {
     std::vector<Move *> moves;

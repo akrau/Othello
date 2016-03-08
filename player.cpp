@@ -18,27 +18,8 @@ Player::Player(Side ourSide) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = true;
     side = ourSide;
-    //side = WHITE;
     opponentSide = ((side == BLACK)? WHITE : BLACK);
-    /*char boardData[64] = {
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-        ' ', 'b', ' ', ' ', ' ', ' ', ' ', ' ', 
-        'b', 'w', 'b', 'b', 'b', 'b', ' ', ' ', 
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-        ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
-    };
-    Board *board = new Board();
-    board->setBoard(boardData);*/
-   board = new Board();
-/*
-    while ((clock() - t) / CLOCKS_PER_SEC < 30.0)
-    {
-        //
-    }   
-    */
+    board = new Board();
 }
 
 /*
@@ -60,7 +41,6 @@ Player::~Player() {
  * The move returned must be legal; if there are no valid moves for your side,
  * return NULL.
  * 
- * This runs the naive heuristic
  */
  Move *Player::doMove(Move *opponentsMove, int msLeft) 
     {
@@ -72,7 +52,7 @@ Player::~Player() {
             {
                 board->doMove(opponentsMove, opponentSide); 
             }
-            vector<Move *> moves = board->listMoves(side);
+            vector<Move *> moves = board->listMoves(side); //defined in board.cpp
             if(!(moves.empty()))
             {
                 if(!testingMinimax)
@@ -80,15 +60,17 @@ Player::~Player() {
                 else
                     return doMoveMinMax(opponentsMove, moves);
             }
-            else{
-		board->printBoard();
+            else
                 return NULL;
-		}
         }
-	board->printBoard();
         return NULL;
         
     }
+
+/*
+* This runs a simple two ply min max utilizing the naive heuristic score 
+*   calculations on othello.
+*/
 
 Move *Player::doMoveMinMax(Move *opponentsMove, vector<Move *> moves)
 {
@@ -98,30 +80,28 @@ Move *Player::doMoveMinMax(Move *opponentsMove, vector<Move *> moves)
     for(unsigned int i = 0; i < moves.size(); i++)
     {
         Board * b = board->copy();
-	std::cerr << "This is a possible move: " << moves[i]->x << "," << moves[i]->y << endl;
         double lowscore = 100000;
         b->doMove(moves[i], side);
         children = b->listMoves(opponentSide);
         for(unsigned int j = 0; j < children.size(); j++)
         {
-            std::cerr << "This is a child move: " << children[j]->x << "," <<children[j]->y <<endl;
             double score = heuristicScore(children[j], b->copy(), opponentSide);
-	    std::cerr << "This is score: " << score << endl;
             if(score < lowscore)
                     lowscore = score;
-	    std::cerr << "This is lowest score: " << lowscore << endl;
         }
         if(lowscore > lowestscore)
-        {        bestmove = moves[i]; lowestscore = lowscore; }
-	std::cerr << "This is lowscore: " <<lowscore << ". This is lowest score: " << lowestscore << endl;
+        {        
+            bestmove = moves[i]; 
+            lowestscore = lowscore; 
+        }
     }
-	board->doMove(bestmove, side);
+	    board->doMove(bestmove, side);
         return bestmove;
 }
-    /* 
-     * TODO: Implement how moves your AI should play here. You should first
-     * process the opponent's opponents move before calculating your own move
-     */
+
+/* 
+* This runs a heuristic AI on Othello
+*/
  Move *Player::doMoveHeuristic(Move *opponentsMove, vector<Move *> moves) {
             Move * bestmove = moves[0];
             double bestScore = heuristicScore(moves[0], board->copy(), side);
@@ -153,7 +133,6 @@ double Player::heuristicScore(Move *move, Board *b, Side sde)
 {
     double sum;
     b->doMove(move, sde);
-    b->printBoard();
     sum = b->count(side) - b->count(opponentSide);
     if(!testingMinimax) {
         if((move->getX() == 0 && move->getY() == 0) || (move->getX() == 0 && move->getY() == 7) || (move->getX() == 7 && move->getY() == 0) || (move->getX() == 7 && move->getY() == 7))
@@ -172,14 +151,11 @@ double Player::heuristicScore(Move *move, Board *b, Side sde)
 
 }
 
-
+/*
+* This was the initial random AI that ran valid moves
+*
+*/
 Move *Player::doMoveRandom(Move *opponentsMove, int msLeft) {
-    /* 
-     * TODO: Implement how moves your AI should play here. You should first
-     * process the opponent's opponents move before calculating your own move
-     *
-     * This function was our initial function that ran random valid moves
-     */
     
     clock_t t = clock();
     if (msLeft < 0 || (clock() - t) / CLOCKS_PER_SEC < msLeft / 1000.0)
@@ -188,7 +164,7 @@ Move *Player::doMoveRandom(Move *opponentsMove, int msLeft) {
         {
             board->doMove(opponentsMove, opponentSide); 
         }
-        Move * move = board->findMoves(side);
+        Move * move = board->findMoves(side); //defined in board.cpp
         if(move != NULL)
         {
             board->doMove(move, side);
