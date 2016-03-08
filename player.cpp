@@ -46,6 +46,8 @@ Player::~Player() {
  *
  * The move returned must be legal; if there are no valid moves for your side,
  * return NULL.
+ * 
+ * This runs the naive heuristic
  */
  Move *Player::doMove(Move *opponentsMove, int msLeft) {
     /* 
@@ -84,7 +86,17 @@ Player::~Player() {
     return NULL;
 }
 
-
+/*
+* Naive heuristic function. 
+*@param move = move we want to find score for
+*@param b = copy of board to test moves on
+*
+* Function runs move on copy of board, and calculates score based on difference btwn our and 
+* opponents number of pieces. There are multipliers to weight cases when a move is on
+* an edge or corner, and if a move allows the opponent access to a corner, which is
+* detrimental.
+*
+*/
 int Player::heuristicScore(Move *move, Board *b)
 {
     double sum;
@@ -109,6 +121,8 @@ Move *Player::doMoveRandom(Move *opponentsMove, int msLeft) {
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
+     *
+     * This function was our initial function that ran random valid moves
      */
     
     clock_t t = clock();
