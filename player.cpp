@@ -102,17 +102,19 @@ int Player::heuristicScore(Move *move, Board *b)
     double sum;
     b->doMove(move, side);
     sum = b->count(side) - b->count(opponentSide);
-    if((move->x == 0 && move->x == 0) || (move->x == 0 && move->x == 7) || (move->x == 7 && move->x == 0) || (move->x == 7 && move->x == 7))
-        sum *= 3;
-    else if(move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7)
-        sum *= 1.5;
-    Move one(0, 0);
-    Move two(7, 0);
-    Move three(0, 7);
-    Move four(7, 7);
-    if(board->checkMove(&one, opponentSide)|| board->checkMove(&two, opponentSide) || board->checkMove(&three, opponentSide) || board->checkMove(&four, opponentSide))
-        sum *= -3;
-    return sum;
+    if(!testingMinimax) {
+        if((move->x == 0 && move->x == 0) || (move->x == 0 && move->x == 7) || (move->x == 7 && move->x == 0) || (move->x == 7 && move->x == 7))
+            sum *= 3;
+        else if(move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7)
+            sum *= 1.5;
+        Move one(0, 0);
+        Move two(7, 0);
+        Move three(0, 7);
+        Move four(7, 7);
+        if(board->checkMove(&one, opponentSide)|| board->checkMove(&two, opponentSide) || board->checkMove(&three, opponentSide) || board->checkMove(&four, opponentSide))
+            sum *= -3;
+        return sum;
+    }
 
 }
 
