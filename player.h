@@ -13,7 +13,8 @@ class Player {
 public:
     Player(Side side);
     ~Player();
-    
+
+    Move *doMoveHeuristic(Move *opponentsMove, int msLeft)
     Move *doMove(Move *opponentsMove, int msLeft);
     Move *doMoveRandom(Move *opponentsMove, int msLeft);
     int heuristicScore(Move *move, Board *b);

@@ -49,11 +49,20 @@ Player::~Player() {
  * 
  * This runs the naive heuristic
  */
- Move *Player::doMove(Move *opponentsMove, int msLeft) {
+ Move *Player::doMove(Move *opponentsMove, int msLeft) 
+    {
+        if(!testingMinimax)
+            doMoveHeuristic(opponentsMove, msLeft);
+        else
+        {
+            
+        }
+    }
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */
+ Move *Player::doMoveHeuristic(Move *opponentsMove, int msLeft) {
     clock_t t = clock();
     if (msLeft < 0 || (clock() - t) / CLOCKS_PER_SEC < msLeft / 1000.0)
     {
