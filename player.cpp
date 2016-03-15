@@ -16,7 +16,7 @@ Player::Player(Side ourSide) {
     //clock_t t = clock();
     
     // Will be set to true in test_minimax.cpp.
-    testingMinimax = true;
+    testingMinimax = false;
     side = ourSide;
     opponentSide = ((side == BLACK)? WHITE : BLACK);
     board = new Board();
@@ -100,23 +100,24 @@ Move *Player::doMoveMinMax(Move *opponentsMove, vector<Move *> moves)
 }
 
 /*
-* This runs an alpha-beta minimax utilizing the naive heuristic score 
+* This runs an alpha-beta negamax utilizing the naive heuristic score 
 *   calculations on othello.
+* Still a work in progress; might not use as the algorithm for tournament
 */
 
-double Player::doMoveAB(int depth, int alpha, int beta)
+double Player::negaAB(int depth, int alpha, int beta)
 {
+    vector<Move *> moves = board->listMoves(side);
+
     if (depth == 0)
     {
         // "evaluate"?
-        return heuristicScore(/**move*/, /**board*/, side);
+        return heuristicScore(moves[0], board->copy(), side);
     }
-    
-    vector<Move *> moves = board->listMoves(side);
 
-    for (int i = 0; i < moves.size(); i++)
+    for (unsigned int i = 0; i < moves.size(); i++)
     {
-        int score = -doMoveAB(depth - 1, -beta, -alpha);
+        double score = -negaAB(depth - 1, -beta, -alpha);
 
         if (score > alpha)
         {
@@ -129,7 +130,6 @@ double Player::doMoveAB(int depth, int alpha, int beta)
     }
 
     return alpha;
-    
 }
 
 

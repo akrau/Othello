@@ -8,6 +8,8 @@
 using namespace std;
 #include <vector>
 
+#define DEPTH (2)
+
 class Player {
 
 public:
@@ -19,6 +21,7 @@ public:
     Move *doMove(Move *opponentsMove, int msLeft);
     Move *doMoveRandom(Move *opponentsMove, int msLeft);
     double heuristicScore(Move *move, Board *b, Side sde);
+    double negaAB(int depth, int alpha, int beta);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
