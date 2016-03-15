@@ -99,6 +99,41 @@ Move *Player::doMoveMinMax(Move *opponentsMove, vector<Move *> moves)
         return bestmove;
 }
 
+/*
+* This runs an alpha-beta minimax utilizing the naive heuristic score 
+*   calculations on othello.
+*/
+
+double Player::doMoveAB(int depth, int alpha, int beta)
+{
+    if (depth == 0)
+    {
+        // "evaluate"?
+        return heuristicScore(/**move*/, /**board*/, side);
+    }
+    
+    vector<Move *> moves = board->listMoves(side);
+
+    for (int i = 0; i < moves.size(); i++)
+    {
+        int score = -doMoveAB(depth - 1, -beta, -alpha);
+
+        if (score > alpha)
+        {
+            alpha = score;
+        }
+        if (score >= beta)
+        {
+            break;
+        }
+    }
+
+    return alpha;
+    
+}
+
+
+
 /* 
 * This runs a heuristic AI on Othello
 */
